@@ -5,22 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header  class="head">
-        Organize your books 📖
+        <p class="he">Your Books 📖-</p>
+        <button id="addb">+</button>
     </header>
+    <main>
+    <div class="form">
     <form id="info" style="display: none;">
-        <label for="ti">Title</label>
+       <div class="f"> <label for="ti">Title</label>
         <input type="text" id="ti">
+    </div>
+    <div class="f">
         <label for="au">Author</label>
         <input type="text" id="au">
+    </div>
+    <div class="f">
         <label for="pg">Pages</label>
         <input type="text" id="pg">
-        <label for="re">read</label>
+    </div>
+    <div class="f">
+        <label for="re">Read</label>
         <input type="checkbox" id="re">
+    </div>
+        <input type="submit" value="Add" class="subb">
     </form>
+    </div>
+    </main>
+    <body>
+        <script src="script.js"></script>
+    </body>
 </body>
 </html>
