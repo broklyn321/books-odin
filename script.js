@@ -1,28 +1,117 @@
-let lib=[];
+const addBtn = document.querySelector('#addBtn');
+addBtn.addEventListener('click', addBookToLibrary);
 
-function book(ti,au,pg,re)
-{
-    this.ti=ti;
-    this.au=au;
-    this.pg=pg;
-    this.re=re;
+const newBookBtn = document.querySelector('#newBtn');
+newBookBtn.addEventListener('click', () => popUpForm.style.display = 'block');
+
+const popUpForm = document.getElementById('popUp');
+const closePopUp = document.getElementsByTagName('span')[0];
+closePopUp.addEventListener('click', () => popUpForm.style.display = 'none');
+
+class Book {
+    constructor(title, author, pages, read) {
+        this.title = form.title.value; 
+        this.author = form.author.value; 
+        this.pages = form.pages.value + 'pgs'; 
+        this.read = form.read.checked; 
+    }
 }
-function addb()
-{
-    let ti=document.querySelector("#ti").value;
-    let au=document.getElementById("#au").value;
-    let pg=document.getElementById("#pg").value;
-    let re=document.getElementById("#re").checked;
-    let nbook= new book(ti,au,pg,re);
-    console.log(nbook);
+let myLibrary = [];
+let newBook;
+
+function addBookToLibrary() {
+    event.preventDefault();
+    popUpForm.style.display = 'none';
+
+    newBook = new Book(title, author, pages,read); 
+    myLibrary.push(newBook); 
+    setData();  //saves updated array in local storage
+    render(); 
+    form.reset();
 }
-let newbb=document.querySelector("#addb");
-newbb.addEventListener("click", function() {
+
+//Creates book visual in browser
+function render() {
+    const display = document.getElementById('Library-container');
+    const books = document.querySelectorAll('.book');
+    books.forEach(book => display.removeChild(book));
+   
+    for (let i=0; i<myLibrary.length; i++){
+        createBook(myLibrary[i]);
+    }
+}
+
+//creats book DOM elements, to use in render();
+function createBook(item) {
+    const library = document.querySelector('#Library-container');
+    const bookDiv = document.createElement('div');
+    const titleDiv = document.createElement('div');
+    const authDiv = document.createElement('div');
+    const pageDiv = document.createElement('div');
+    const removeBtn = document.createElement('button');
+    const readBtn = document.createElement('button');
     
-    let newf= document.querySelector("#info");
-    newf.style.display="block";
-})
-document.querySelector("#info").addEventListener("submit",function(){
-    event.preventDefault;
-    addb();
-})
+    
+    bookDiv.classList.add('book');
+    bookDiv.setAttribute('id', myLibrary.indexOf(item));
+
+    titleDiv.textContent = item.title;
+    titleDiv.classList.add('title');
+    bookDiv.appendChild(titleDiv);
+
+    authDiv.textContent = item.author;
+    authDiv.classList.add('author');
+    bookDiv.appendChild(authDiv);
+
+    pageDiv.textContent = item.pages;
+    pageDiv.classList.add('pages');
+    bookDiv.appendChild(pageDiv);
+
+    readBtn.classList.add('readBtn')    
+    bookDiv.appendChild(readBtn);
+    if(item.read===false) {
+        readBtn.textContent = 'Not Read';
+        readBtn.style.backgroundColor = '#609e7c';
+    }else {
+        readBtn.textContent = 'Read';
+        readBtn.style.backgroundColor = '#0bba69';
+    }
+
+    removeBtn.textContent = 'Remove'; 
+    removeBtn.setAttribute('id', 'removeBtn');
+    bookDiv.appendChild(removeBtn);
+    
+    library.appendChild(bookDiv);
+
+    removeBtn.addEventListener('click', () => {
+        myLibrary.splice(myLibrary.indexOf(item),1);
+        setData()
+        render();
+    });
+
+    //add toggle ability to each book 'read' button on click
+    readBtn.addEventListener('click', () => { 
+        item.read = !item.read; 
+        setData(); 
+        render();
+    }); 
+};
+
+// setting Library to be stored in local storage
+function setData() {
+    localStorage.setItem(`myLibrary`, JSON.stringify(myLibrary));
+}
+
+//pulls books from local storage when page is refreshed
+function restore() {
+    if(!localStorage.myLibrary) {
+        render();
+    }else {
+        let objects = localStorage.getItem('myLibrary') 
+        // gets information from local storage to use in below loop to create DOM/display
+        objects = JSON.parse(objects);
+        myLibrary = objects;
+        render();
+    }
+}
+restore();
