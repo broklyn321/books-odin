@@ -25,12 +25,11 @@ function addBookToLibrary() {
 
     newBook = new Book(title, author, pages,read); 
     myLibrary.push(newBook); 
-    setData();  //saves updated array in local storage
+    setData();
     render(); 
     form.reset();
 }
 
-//Creates book visual in browser
 function render() {
     const display = document.getElementById('Library-container');
     const books = document.querySelectorAll('.book');
@@ -41,7 +40,6 @@ function render() {
     }
 }
 
-//creats book DOM elements, to use in render();
 function createBook(item) {
     const library = document.querySelector('#Library-container');
     const bookDiv = document.createElement('div');
@@ -89,7 +87,7 @@ function createBook(item) {
         render();
     });
 
-    //add toggle ability to each book 'read' button on click
+   
     readBtn.addEventListener('click', () => { 
         item.read = !item.read; 
         setData(); 
@@ -97,18 +95,18 @@ function createBook(item) {
     }); 
 };
 
-// setting Library to be stored in local storage
+
 function setData() {
     localStorage.setItem(`myLibrary`, JSON.stringify(myLibrary));
 }
 
-//pulls books from local storage when page is refreshed
+
 function restore() {
     if(!localStorage.myLibrary) {
         render();
     }else {
         let objects = localStorage.getItem('myLibrary') 
-        // gets information from local storage to use in below loop to create DOM/display
+        
         objects = JSON.parse(objects);
         myLibrary = objects;
         render();
